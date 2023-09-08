@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+      if (sessionStorage.getItem("login") !== "true") {
+        window.location.href = window.location.origin + "/admin/login.html";
+      }
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý sản phẩm</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .product-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .product-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .product-item img {
+        width: 100px;
+        height: 100px;
+        margin-right: 10px;
+      }
+
+      .product-actions {
+        margin-left: auto;
+      }
+
+      /* Custom CSS for the sidebar */
+      .sidenav {
+        height: 100%;
+        width: 250px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: -250px;
+        background-color: #f8f9fa;
+        padding-top: 40px;
+        transition: 0.3s;
+      }
+
+      .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 18px;
+        color: #000;
+        display: block;
+        transition: 0.3s;
+      }
+
+      .sidenav a:hover {
+        color: #007bff;
+      }
+
+      #main {
+        transition: margin-left 0.3s;
+        padding: 16px;
+      }
+
+      #menu-toggle {
+        cursor: pointer;
+        position: fixed;
+        left: 10px;
+        top: 10px;
+        z-index: 2;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <!-- Menu Toggle Button -->
+    <span style="font-size:30px;cursor:pointer; margin-bottom: 20px;" id="menu-toggle">&#9776; </span>
+
+    <!-- Sidebar -->
+    <div class="sidenav" id="mySidenav">
+      <a href="/admin/dashboard.html" id="dashboard-link">Quản lý sản phẩm</a>
+      <a href="/admin/settings.html" id="settings-link">Cài đặt</a>
+    </div>
+
+    <div id="main">
+      <div class="container">
+        <h1>Quản lý sản phẩm</h1>
+
+        <form id="product-form">
+          <div class="form-group">
+            <label for="product-name">Tên sản phẩm:</label>
+            <input
+              class="form-control"
+              type="text"
+              id="product-name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="product-price">Giá:</label>
+            <input
+              class="form-control"
+              type="text"
+              id="product-price"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="product-image">Chọn ảnh:</label>
+            <input
+              type="file"
+              class="form-control-file"
+              id="product-image-file"
+              accept="image/*"
+              required
+            />
+          </div>
+
+          <button
+            id="add-button"
+            type="submit"
+            class="btn btn-primary mt-2 mb-2"
+          >
+            Thêm sản phẩm
+          </button>
+        </form>
+
+        <ul class="product-list" id="product-list">
+          <!-- Danh sách sản phẩm sẽ được hiển thị ở đây -->
+        </ul>
+      </div>
+    </div>
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Firebase -->
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+    <script>
+      // Toggle sidebar
+      document
+        .getElementById("menu-toggle")
+        .addEventListener("click", function () {
+          const sidebar = document.getElementById("mySidenav");
+          const main = document.getElementById("main");
+
+          if (sidebar.style.left === "0px") {
+            sidebar.style.left = "-250px";
+            main.style.marginLeft = "0";
+          } else {
+            sidebar.style.left = "0";
+            main.style.marginLeft = "250px";
+          }
+        });
+
+      // Sidebar links
+      const dashboardLink = document.getElementById("dashboard-link");
+      const settingsLink = document.getElementById("settings-link");
+
+      dashboardLink.addEventListener("click", function () {
+        loadPage("dashboard.html");
+      });
+
+      settingsLink.addEventListener("click", function () {
+        loadPage("settings.html");
+      });
+
+      // Function to load page without reloading
+      function loadPage(url) {
+        const main = document.getElementById("main");
+        main.innerHTML =
+          '<object type="text/html" data="' +
+          url +
+          '" style="width:100%;height:100%;"></object>';
+      }
+    </script>
+    <script>
+      // Cấu hình Firebase (thay thế bằng thông tin cấu hình của bạn)
+      const firebaseConfig = {
+        apiKey: "AIzaSyANSwlR-gyTKxCBCdhhWHgbB5Fg5-ODJ3c",
+        authDomain: "tourism-de1ac.firebaseapp.com",
+        projectId: "tourism-de1ac",
+        storageBucket: "tourism-de1ac.appspot.com",
+        messagingSenderId: "204093368364",
+        appId: "1:204093368364:web:88baf7f0e2582e3f4cc989",
+        measurementId: "G-XVC8PLLSJF",
+        databaseURL:
+          "https://tourism-de1ac-default-rtdb.asia-southeast1.firebasedatabase.app",
+      };
+
+      // Khởi tạo Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      // Firebase Realtime Database reference
+      const db = firebase.database();
+      const productsRef = db.ref("products");
+
+      // Firebase Storage reference
+      const storage = firebase.storage();
+      const storageRef = storage.ref();
+
+      // Hàm để thêm sản phẩm mới
+      function addProduct() {
+        const name = productNameInput.value;
+        const price = productPriceInput.value;
+        const imageFile = productImageFileInput.files[0];
+
+        if (name && price && imageFile) {
+          // Tạo một unique ID cho ảnh
+          const imageId = Date.now().toString();
+          addButton.disabled = true;
+          addButton.textContent = "Đang tải...";
+
+          // Lưu ảnh vào Firebase Storage
+          var uploadTask = storageRef
+            .child("images/" + new Date().getTime() + ".jpg")
+            .put(imageFile);
+
+          // Register three observers:
+          // 1. 'state_changed' observer, called any time the state changes
+          // 2. Error observer, called on failure
+          // 3. Completion observer, called on successful completion
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              // Observe state change events such as progress, pause, and resume
+              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+              var progress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              console.log("Upload is " + progress + "% done");
+              switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED: // or 'paused'
+                  console.log("Upload is paused");
+                  break;
+                case firebase.storage.TaskState.RUNNING: // or 'running'
+                  console.log("Upload is running");
+                  break;
+              }
+            },
+            (error) => {
+              // Handle unsuccessful uploads
+            },
+            () => {
+              // Handle successful uploads on complete
+              // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+              uploadTask.snapshot.ref.getDownloadURL().then((imageUrl) => {
+                console.log("File available at", imageUrl);
+                const product = {
+                  name,
+                  price,
+                  imageUrl,
+                  productId: new Date().getTime() + Math.random(10000, 99999),
+                };
+
+                // Sử dụng Firebase để thêm sản phẩm
+                productsRef.push(product);
+
+                productNameInput.value = "";
+                productPriceInput.value = "";
+                productImageFileInput.value = "";
+                addButton.disabled = false;
+                addButton.textContent = "Thêm sản phẩm";
+              });
+            }
+          );
+        }
+      }
+
+      function deleteProduct(key) {
+        const confirmDelete = confirm(
+          "Bạn có chắc chắn muốn xoá sản phẩm này?"
+        );
+
+        if (confirmDelete) {
+          // Sử dụng Firebase để xoá sản phẩm dựa trên key
+          productsRef.once("value").then((snapshot) => {
+            const productsObject = snapshot.val();
+            const dataArray = [];
+            for (const key in productsObject) {
+              const item = productsObject[key];
+              item.key = key; // Thêm key vào mỗi phần tử
+              dataArray.push(item);
+            }
+            console.log(dataArray);
+            // Lặp qua danh sách sản phẩm và tìm sản phẩm có tên trùng khớp
+            const result = dataArray.find((item) => item.productId == key);
+            if (result) {
+              productsRef.child(result.key).remove();
+            }
+          });
+          // Sử dụng Firebase để lắng nghe sự kiện child_removed để cập nhật danh sách khi có sản phẩm bị xoá
+          productsRef.on("child_removed", (snapshot) => {
+            // Lấy key của sản phẩm bị xoá
+
+            // Xóa sản phẩm tương ứng khỏi danh sách sản phẩm
+            const deletedProductLi = document.querySelector(
+              `.product-item button[onclick="deleteProduct('${key}')"]`
+            );
+
+            if (deletedProductLi) {
+              deletedProductLi.parentElement.remove();
+            }
+          });
+        }
+      }
+
+      // Sử dụng Firebase để lắng nghe sự thay đổi trong danh sách sản phẩm và cập nhật giao diện
+      productsRef.on("value", (snapshot) => {
+        const productsObject = snapshot.val();
+        if (productsObject) {
+          const productsArray = Object.values(productsObject);
+          productList.innerHTML = ""; // Xóa danh sách sản phẩm hiện tại
+
+          productsArray.reverse().forEach((product, index) => {
+            const li = document.createElement("li");
+            li.className = "product-item";
+
+            li.innerHTML = `
+                            <img src="${product.imageUrl}" alt="${product.name}">
+                            <span>${product.name} - Giá: ${product.price} đ</span>
+                            <button class="btn btn-danger ml-2" onclick="deleteProduct('${product.productId}')">Xoá</button>
+                        `;
+
+            productList.appendChild(li);
+          });
+        }
+      });
+
+      // DOM elements
+      const productForm = document.getElementById("product-form");
+      const productNameInput = document.getElementById("product-name");
+      const productPriceInput = document.getElementById("product-price");
+      const addButton = document.getElementById("add-button"); // Thêm ID cho nút "Thêm sản phẩm"
+      const productImageFileInput =
+        document.getElementById("product-image-file");
+      const productList = document.getElementById("product-list");
+
+      // Xử lý sự kiện nút thêm sản phẩm
+      productForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        addProduct();
+      });
+      productPriceInput.addEventListener("input", function (event) {
+        // Loại bỏ các ký tự không phải số và không phải dấu phân cách hàng nghìn
+        const sanitizedPrice = event.target.value.replace(/[^0-9]/g, "");
+
+        // Định dạng giá theo mong muốn (thêm dấu phân cách hàng nghìn và chữ VND)
+        let formattedPrice = `${sanitizedPrice.replace(
+          /\B(?=(\d{3})+(?!\d))/g,
+          ","
+        )} VND`;
+        // if(event.keyCode == 8 ) {
+        //   console.log(111)
+        //   `${sanitizedPrice.slice(0, -1).replace(
+        //   /\B(?=(\d{3})+(?!\d))/g,
+        //   ","
+        // )} VND`;
+        // }
+
+        // Gán giá trị đã định dạng lại vào input
+        event.target.value = formattedPrice;
+      });
+    </script>
+  </body>
+</html>

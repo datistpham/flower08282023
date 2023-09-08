@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script>
+      if (sessionStorage.getItem("login") !== "true") {
+        window.location.href = window.location.origin + "/admin/login.html";
+      }
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cài đặt</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      /* Custom CSS for the sidebar */
+      .sidenav {
+        height: 100%;
+        width: 250px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: -250px;
+        background-color: #f8f9fa;
+        padding-top: 40px;
+        transition: 0.3s;
+      }
+
+      .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 18px;
+        color: #000;
+        display: block;
+        transition: 0.3s;
+      }
+
+      .sidenav a:hover {
+        color: #007bff;
+      }
+
+      #main {
+        transition: margin-left 0.3s;
+        padding: 16px;
+      }
+
+      #menu-toggle {
+        cursor: pointer;
+        position: fixed;
+        left: 10px;
+        top: 10px;
+        z-index: 2;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div id="page-content">
+      <!-- Menu Toggle Button -->
+      <span style="font-size: 30px; cursor: pointer" id="menu-toggle"
+        >&#9776;
+      </span>
+
+      <!-- Sidebar -->
+      <div class="sidenav" id="mySidenav">
+        <a href="/admin/dashboard.html" id="dashboard-link">Quản lý sản phẩm</a>
+        <a href="/admin/settings.html" id="dashboard-link">Cài đặt</a>
+      </div>
+
+      <!-- Main content -->
+      <div id="main">
+        <div class="container">
+          <h1>Cài đặt</h1>
+
+          <form id="settings-form">
+            <div class="form-group">
+              <label for="phone1">Số điện thoại 1:</label>
+              <input
+                class="form-control"
+                type="text"
+                id="phone1"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="phone2">Số điện thoại 2:</label>
+              <input
+                class="form-control"
+                type="text"
+                id="phone2"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="fbPageLink">Link trang Facebook:</label>
+              <input
+                class="form-control"
+                type="text"
+                id="fbPageLink"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="shopAddress">Địa chỉ cửa hàng:</label>
+              <input
+                class="form-control"
+                type="text"
+                id="shopAddress"
+                required
+              />
+            </div>
+
+            <button
+              id="save-button"
+              type="submit"
+              class="btn btn-primary mt-2 mb-2"
+            >
+              Lưu cài đặt
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Firebase -->
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+    <script>
+      // Toggle sidebar
+      document
+        .getElementById("menu-toggle")
+        .addEventListener("click", function () {
+          const sidebar = document.getElementById("mySidenav");
+          const main = document.getElementById("main");
+
+          if (sidebar.style.left === "0px") {
+            sidebar.style.left = "-250px";
+            main.style.marginLeft = "0";
+          } else {
+            sidebar.style.left = "0";
+            main.style.marginLeft = "250px";
+          }
+        });
+
+      // Function to load page without reloading
+      function loadPage(url) {
+        fetch(url)
+          .then((response) => response.text())
+          .then((data) => {
+            const main = document.getElementById("main");
+            main.innerHTML = data;
+            history.pushState({ url }, null, url); // Thay đổi URL
+          })
+          .catch((error) => {
+            console.error("Error loading page:", error);
+          });
+      }
+
+      // Xử lý khi người dùng click vào các liên kết trên sidebar
+      const dashboardLink = document.getElementById("dashboard-link");
+
+      dashboardLink.addEventListener("click", function () {
+        loadPage("dashboard.html");
+      });
+
+      // Xử lý sự kiện khi người dùng click nút Back/Forward trình duyệt
+      window.addEventListener("popstate", function (event) {
+        if (event.state && event.state.url) {
+          loadPage(event.state.url);
+        }
+      });
+
+      // Firebase cấu hình
+      const firebaseConfig = {
+        apiKey: "AIzaSyANSwlR-gyTKxCBCdhhWHgbB5Fg5-ODJ3c",
+        authDomain: "tourism-de1ac.firebaseapp.com",
+        projectId: "tourism-de1ac",
+        storageBucket: "tourism-de1ac.appspot.com",
+        messagingSenderId: "204093368364",
+        appId: "1:204093368364:web:88baf7f0e2582e3f4cc989",
+        measurementId: "G-XVC8PLLSJF",
+        databaseURL:
+          "https://tourism-de1ac-default-rtdb.asia-southeast1.firebasedatabase.app",
+      };
+
+      // Khởi tạo Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      // Firebase Realtime Database reference
+      const db = firebase.database();
+      const settingsRef = db.ref("settings");
+
+      // DOM elements
+      const settingsForm = document.getElementById("settings-form");
+      const phone1Input = document.getElementById("phone1");
+      const phone2Input = document.getElementById("phone2");
+      const fbPageLinkInput = document.getElementById("fbPageLink");
+      const shopAddressInput = document.getElementById("shopAddress");
+      const saveButton = document.getElementById("save-button");
+
+      // Xử lý sự kiện khi người dùng thay đổi cài đặt và lưu
+      settingsForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const phone1 = phone1Input.value;
+        const phone2 = phone2Input.value;
+        const fbPageLink = fbPageLinkInput.value;
+        const shopAddress = shopAddressInput.value;
+
+        // Kiểm tra các giá trị không rỗng
+        if (phone1 && phone2 && fbPageLink && shopAddress) {
+          const settings = {
+            phone1,
+            phone2,
+            fbPageLink,
+            shopAddress,
+          };
+
+          // Sử dụng Firebase để lưu cài đặt
+          settingsRef.set(settings);
+
+          alert("Lưu cài đặt thành công!");
+        } else {
+          alert("Vui lòng điền đầy đủ thông tin cài đặt.");
+        }
+      });
+
+      // Sử dụng Firebase để lấy dữ liệu cài đặt ban đầu
+      settingsRef.once("value").then((snapshot) => {
+        const settings = snapshot.val();
+        if (settings) {
+          // Hiển thị dữ liệu cài đặt ban đầu trong các input
+          phone1Input.value = settings.phone1;
+          phone2Input.value = settings.phone2;
+          fbPageLinkInput.value = settings.fbPageLink;
+          shopAddressInput.value = settings.shopAddress;
+        }
+      });
+    </script>
+  </body>
+</html>
