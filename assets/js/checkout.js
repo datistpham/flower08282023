@@ -23,7 +23,7 @@ document.getElementById("payment-order").onclick= (e) => {
     dataToAdd["address"]= address.value
     dataToAdd["email"]= email.value
     dataToAdd["note"]= note.value
-    dataToAdd["time"]= time
+    dataToAdd["time_send"]= time.toString()
     dataToAdd["order"]= cart10
     dataToAdd["method"]= method.value
     const newUserRef = usersRef.push(); // Tạo một ID ngẫu nhiên cho dữ liệu mới
