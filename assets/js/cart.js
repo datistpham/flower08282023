@@ -28,7 +28,7 @@ class="woocommerce-cart-form__cart-item cart_item"
 
 <td class="product-thumbnail">
 <a
-  href="http://localhost:5500/san-pham/chau-hoa-lan-ho-diep-1809d1/"
+  href="https://flower08282023.vercel.app/san-pham/chau-hoa-lan-ho-diep-1809d1/"
   ><img
     width="300"
     height="300"
@@ -141,7 +141,7 @@ function removeFromCart(productId) {
   
   <td class="product-thumbnail">
     <a
-      href="http://localhost:5500/san-pham/chau-hoa-lan-ho-diep-1809d1/"
+      href="https://flower08282023.vercel.app/san-pham/chau-hoa-lan-ho-diep-1809d1/"
       ><img
         width="300"
         height="300"
@@ -245,7 +245,7 @@ function updateCartAmount(productId, e) {
   
   <td class="product-thumbnail">
     <a
-      href="http://localhost:5500/san-pham/chau-hoa-lan-ho-diep-1809d1/"
+      href="https://flower08282023.vercel.app/san-pham/chau-hoa-lan-ho-diep-1809d1/"
       ><img
         width="300"
         height="300"
@@ -351,7 +351,7 @@ function updateCartAmount(productId, e) {
     
     <td class="product-thumbnail">
       <a
-        href="http://localhost:5500/san-pham/chau-hoa-lan-ho-diep-1809d1/"
+        href="https://flower08282023.vercel.app/san-pham/chau-hoa-lan-ho-diep-1809d1/"
         ><img
           width="300"
           height="300"
@@ -465,7 +465,7 @@ function renderCart() {
     
     <td class="product-thumbnail">
     <a
-      href="http://localhost:5500/san-pham/chau-hoa-lan-ho-diep-1809d1/"
+      href="https://flower08282023.vercel.app/san-pham/chau-hoa-lan-ho-diep-1809d1/"
       ><img
         width="300"
         height="300"
