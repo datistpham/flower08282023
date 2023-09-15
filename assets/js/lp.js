@@ -140,8 +140,8 @@ function getProductsFromDatabase() {
                   data-product_sku=""
                   aria-label="Thêm &ldquo;${item.name}&rdquo; vào giỏ hàng"
                   rel="nofollow"
-                  >Thêm vào giỏ hàng</a
-                >
+                  >Thêm vào giỏ hàng
+                </a>
               </div>
             </div>
           </li>

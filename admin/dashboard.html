@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <script>
       if (sessionStorage.getItem("login") !== "true") {
         window.location.href = window.location.origin + "/admin/login.html";
@@ -90,14 +90,17 @@
   </head>
   <body>
     <!-- Menu Toggle Button -->
-    <span style="font-size:30px;cursor:pointer; margin-bottom: 20px;" id="menu-toggle">&#9776; </span>
+    <span
+      style="font-size: 30px; cursor: pointer; margin-bottom: 20px"
+      id="menu-toggle"
+      >&#9776;
+    </span>
 
     <!-- Sidebar -->
     <div class="sidenav" id="mySidenav">
       <a href="/admin/dashboard.html" id="dashboard-link">Quản lý sản phẩm</a>
       <a href="/admin/settings.html" id="settings-link">Cài đặt</a>
       <a href="/admin/order.html" id="dashboard-link">Đơn đặt hàng</a>
-
     </div>
 
     <div id="main">
@@ -123,6 +126,14 @@
               id="product-price"
               required
             />
+          </div>
+
+          <div class="form-group">
+            <label for="product-category">Thể loại:</label>
+            <select class="form-control" id="product-category" required>
+              <option value="1">Hoa lan ghép lũa</option>
+              <option value="2">Hoa lan ghép chậu sứ</option>
+            </select>
           </div>
 
           <div class="form-group">
@@ -226,9 +237,10 @@
       function addProduct() {
         const name = productNameInput.value;
         const price = productPriceInput.value;
+        const category= productCategory.value
         const imageFile = productImageFileInput.files[0];
 
-        if (name && price && imageFile) {
+        if (name && price && imageFile && category) {
           // Tạo một unique ID cho ảnh
           const imageId = Date.now().toString();
           addButton.disabled = true;
@@ -273,11 +285,12 @@
                   price,
                   imageUrl,
                   productId: new Date().getTime() + Math.random(10000, 99999),
+                  category
                 };
 
                 // Sử dụng Firebase để thêm sản phẩm
                 productsRef.push(product);
-
+                productCategory.value= ""
                 productNameInput.value = "";
                 productPriceInput.value = "";
                 productImageFileInput.value = "";
@@ -353,6 +366,7 @@
       const productForm = document.getElementById("product-form");
       const productNameInput = document.getElementById("product-name");
       const productPriceInput = document.getElementById("product-price");
+      const productCategory= document.getElementById("product-category")
       const addButton = document.getElementById("add-button"); // Thêm ID cho nút "Thêm sản phẩm"
       const productImageFileInput =
         document.getElementById("product-image-file");

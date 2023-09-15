@@ -9,6 +9,7 @@
   const phone2Element = document.querySelector(".phone-shop-2");
   const fbPageLinkElement = document.querySelector("#link-page-fb");
   const shopAddressElement = document.querySelector(".shopAddress");
+  const shopAddressElement1 = document.querySelector("#shopAddress");
   const contactWholeSale= document.querySelector("#contact-wholesale")
   
   // Sử dụng Firebase để lấy dữ liệu cài đặt và hiển thị vào DOM
@@ -20,8 +21,11 @@
       phone2Element.textContent = settings.phone2;
       fbPageLinkElement.setAttribute("href", settings.fbPageLink)
       shopAddressElement.innerText = settings.shopAddress;
-      contactWholeSale.onclick= ()=> {
-        window.open(settings.fbPageLink, "_blank")
+      shopAddressElement.innerHTML= settings.shopAddress
+      if(contactWholeSale) {
+        contactWholeSale.onclick= ()=> {
+          window.open(settings.fbPageLink, "_blank")
+        }
       }
     }
   });
