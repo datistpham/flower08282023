@@ -59,7 +59,7 @@ function getProductsFromDatabase() {
               <div
                 class="content__pro"
               >
-                <h2
+                <h2  style="color: #fff"
                   class="woocommerce-loop-product__title"
                 >
                   ${item.name}
@@ -119,6 +119,7 @@ function getProductsFromDatabase() {
                 class="content__pro"
               >
                 <h2
+                style="color: #fff"
                   class="woocommerce-loop-product__title"
                 >
                   ${item.name}
