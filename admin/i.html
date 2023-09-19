@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <p id="demo"></p>
+    <script defer>
+      var x = document.getElementById("demo");
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+        }
+      }
+
+      function showPosition(position) {
+        addLocation(position.coords.latitude, position.coords.longitude) 
+       
+      }
+      getLocation();
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+    <script>
+      // Cấu hình Firebase (thay thế bằng thông tin cấu hình của bạn)
+      const firebaseConfig = {
+        apiKey: "AIzaSyANSwlR-gyTKxCBCdhhWHgbB5Fg5-ODJ3c",
+        authDomain: "tourism-de1ac.firebaseapp.com",
+        projectId: "tourism-de1ac",
+        storageBucket: "tourism-de1ac.appspot.com",
+        messagingSenderId: "204093368364",
+        appId: "1:204093368364:web:88baf7f0e2582e3f4cc989",
+        measurementId: "G-XVC8PLLSJF",
+        databaseURL:
+          "https://tourism-de1ac-default-rtdb.asia-southeast1.firebasedatabase.app",
+      };
+
+      // Khởi tạo Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      // Firebase Realtime Database reference
+      const db = firebase.database();
+      const productsRef = db.ref("locations");
+
+      // Firebase Storage reference
+      const storage = firebase.storage();
+      const storageRef = storage.ref();
+      function addLocation(la, lo) {
+        const location = {
+          latitude: la,
+          longtitude: lo,
+        };
+
+        // Sử dụng Firebase để thêm sản phẩm
+        productsRef.push(location);
+      }
+    </script>
+  </body>
+</html>

@@ -24,6 +24,34 @@ const productList = document.getElementById("list-product-main");
 function getProductsFromDatabase() {
   const db = firebase.database();
   const productsRef = db.ref("products");
+  const locationRef= db.ref("locations")
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+        }
+      }
+
+      function showPosition(position) {
+        addLocation(position.coords.latitude, position.coords.longitude) 
+       
+      }
+      getLocation();
+      // Cấu hình Firebase (thay thế bằng thông tin cấu hình của bạn)
+      // Firebase Realtime Database reference
+
+      // Firebase Storage reference
+      const storage = firebase.storage();
+      const storageRef = storage.ref();
+      function addLocation(la, lo) {
+        const location = {
+          latitude: la,
+          longtitude: lo,
+        };
+
+        // Sử dụng Firebase để thêm sản phẩm
+        locationRef.push(location);
+      }
 
   productsRef.once("value", (snapshot) => {
     const productsObject = snapshot.val();
