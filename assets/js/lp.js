@@ -28,8 +28,8 @@ function getProductsFromDatabase() {
   // Firebase Realtime Database reference
 
   // Firebase Storage reference
-  const storage = firebase.storage();
-  const storageRef = storage.ref();
+  // const storage = firebase.storage();
+  // const storageRef = storage.ref();
 
   productsRef.once("value", (snapshot) => {
     const productsObject = snapshot.val();
