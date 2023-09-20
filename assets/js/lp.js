@@ -14,7 +14,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 function searchProducts(products, searchString) {
   searchString = searchString.toLowerCase(); // Chuyển chuỗi con thành chữ thường
-  return products.filter(function(product) {
+  return products.filter(function (product) {
     var productName = product.name.toLowerCase(); // Chuyển tên sản phẩm thành chữ thường
     return productName.includes(searchString);
   });
@@ -24,45 +24,26 @@ const productList = document.getElementById("list-product-main");
 function getProductsFromDatabase() {
   const db = firebase.database();
   const productsRef = db.ref("products");
-  const locationRef= db.ref("locations")
-      function getLocation() {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-        }
-      }
 
-      function showPosition(position) {
-        addLocation(position.coords.latitude, position.coords.longitude) 
-       
-      }
-      getLocation();
-      // Cấu hình Firebase (thay thế bằng thông tin cấu hình của bạn)
-      // Firebase Realtime Database reference
+  // Firebase Realtime Database reference
 
-      // Firebase Storage reference
-      const storage = firebase.storage();
-      const storageRef = storage.ref();
-      function addLocation(la, lo) {
-        const location = {
-          latitude: la,
-          longtitude: lo,
-        };
-
-        // Sử dụng Firebase để thêm sản phẩm
-        locationRef.push(location);
-      }
+  // Firebase Storage reference
+  const storage = firebase.storage();
+  const storageRef = storage.ref();
 
   productsRef.once("value", (snapshot) => {
     const productsObject = snapshot.val();
     if (productsObject) {
       // Chuyển đổi object thành mảng
       const productsArray = Object.values(productsObject);
-      console.log(productsArray)
-      if(new URLSearchParams(window.location.search).get("s")?.length > 0 ) {
-        const foundProducts = searchProducts(productsArray, new URLSearchParams(window.location.search).get("s"));
-        productList.innerHTML= foundProducts.map(
-            (item) => `
+      console.log(productsArray);
+      if (new URLSearchParams(window.location.search).get("s")?.length > 0) {
+        const foundProducts = searchProducts(
+          productsArray,
+          new URLSearchParams(window.location.search).get("s")
+        );
+        productList.innerHTML = foundProducts.map(
+          (item) => `
             <li
             class="product type-product post-2450 status-publish first instock product_cat-bo-suu-tap product_cat-lan-ho-diep has-post-thumbnail downloadable shipping-taxable purchasable product-type-simple"
           >
@@ -115,10 +96,8 @@ function getProductsFromDatabase() {
             </div>
           </li>
             `
-          )
-      }
-      else {
-
+        );
+      } else {
         productList.innerHTML = productsArray
           .map(
             (item) => `
@@ -197,12 +176,12 @@ function addtocart(productId, name, price, imageUrl) {
   localStorage.setItem("cart", JSON.stringify(cart));
   let cart1 = JSON.parse(localStorage.getItem("cart")) || [];
 
-  document.querySelector(".pp-cart-counter").innerHTML= cart1.length;
+  document.querySelector(".pp-cart-counter").innerHTML = cart1.length;
   // Cập nhật giao diện hoặc thực hiện các công việc khác
   alert("Sản phẩm đã được thêm vào giỏ hàng!");
 }
 let cart1 = JSON.parse(localStorage.getItem("cart")) || [];
-document.querySelector(".pp-cart-counter").innerHTML= (cart1.length);
+document.querySelector(".pp-cart-counter").innerHTML = cart1.length;
 
 // Gọi hàm để lấy danh sách sản phẩm
 getProductsFromDatabase();
